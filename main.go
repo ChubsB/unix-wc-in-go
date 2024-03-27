@@ -1,21 +1,31 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
-	"log"
 )
 
 func main() {
-	// Specify the path to your test.txt file
-	filePath := "test.txt"
+	// Define command-line flags
+	filePath := flag.String("file", "", "Path to the file to read")
 
-	// Read the file content
-	content, err := ioutil.ReadFile(filePath)
-	if err != nil {
-		log.Fatalf("Error reading file: %v", err)
+	// Parse command-line flags
+	flag.Parse()
+
+	// Check if the file flag is provided
+	if *filePath == "" {
+		fmt.Println("Usage: unix-wc-in-go -file=path/to/your/file.txt")
+		return
 	}
 
-	// Print the file content as a string
+	// Read the file content
+	content, err := ioutil.ReadFile(*filePath)
+	if err != nil {
+		fmt.Printf("Error reading file: %v\n", err)
+		return
+	}
+
+	// Print the file content
 	fmt.Println(string(content))
 }
