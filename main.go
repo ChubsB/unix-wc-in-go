@@ -14,6 +14,7 @@ func main() {
 	countBytes := flag.Bool("c", false, "Count the number of bytes in the file")
 	countLines := flag.Bool("l", false, "Count the number of lines in the file")
 	countWords := flag.Bool("w", false, "Count the number of words in the file")
+	countCharacters := flag.Bool("m", false, "Count the number of characters in the file")
 
 	flag.Parse()
 
@@ -85,4 +86,13 @@ func main() {
 		fmt.Printf("%d %s\n", wordCount, file.Name())
 	}
 
+	if *countCharacters {
+		content, err := io.ReadAll(file)
+		if err != nil {
+			log.Fatalf("Error reading file: %v", err)
+		}
+
+		characterCount := len([]rune(string(content)))
+		fmt.Printf("%d %s\n", characterCount, file.Name())
+	}
 }
