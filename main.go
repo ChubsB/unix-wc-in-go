@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"os"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	}
 
 	// Read the file content
-	content, err := ioutil.ReadFile(*filePath)
+	content, err := os.ReadFile(*filePath)
 	if err != nil {
 		fmt.Printf("Error reading file: %v\n", err)
 		return
