@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"unicode"
 )
 
 func main() {
@@ -59,30 +61,28 @@ func main() {
 
 	if *countWords {
 		var wordCount int
-		var word []byte
+		inWord := false
+		content, err := io.ReadAll(file)
+		if err != nil {
+			log.Fatalf("Error reading file: %v", err)
+		}
 
-		buf := make([]byte, 1)
-		for {
-			n, err := file.Read(buf)
-			if n == 1 {
-				if buf[0] == ' ' {
-					if len(word) > 0 {
-						fmt.Println(string(word))
-						word = []byte{}
-						wordCount++
-					}
-				} else {
-					word = append(word, buf[0])
-				}
-			}
-			if err != nil {
-				if len(word) > 0 {
-					fmt.Println(string(word))
+		for _, runeValue := range string(content) {
+			if unicode.IsSpace(runeValue) {
+				if inWord {
 					wordCount++
+					inWord = false
 				}
-				break
+			} else {
+				inWord = true
 			}
 		}
-		fmt.Printf("Total words: %d in file %s\n", wordCount, file.Name())
+
+		if inWord {
+			wordCount++
+		}
+
+		fmt.Printf("%d %s\n", wordCount, file.Name())
 	}
+
 }
