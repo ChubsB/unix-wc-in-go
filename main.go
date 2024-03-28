@@ -91,7 +91,6 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error reading file: %v", err)
 		}
-
 		characterCount := len([]rune(string(content)))
 		fmt.Printf("%d %s\n", characterCount, file.Name())
 	}
